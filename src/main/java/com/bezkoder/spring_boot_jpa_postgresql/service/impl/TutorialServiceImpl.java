@@ -65,6 +65,11 @@ public class TutorialServiceImpl implements TutorialService {
     }
 
     @Override
+    public List<Tutorial> findByExactTitle(String title) {
+        return tutorialRepository.findByTitle(title);
+    }
+
+    @Override
     public List<Tutorial> findByPublished() {
         return tutorialRepository.findByPublished(true);
     }

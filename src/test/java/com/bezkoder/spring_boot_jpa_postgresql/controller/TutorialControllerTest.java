@@ -63,6 +63,38 @@ class TutorialControllerTest {
     }
 
     @Test
+    void findByExactTitleReturnsOkWithTutorialsAndForwardsTitle() {
+        List<Tutorial> tutorials = List.of(new Tutorial("Spring", "REST API", true));
+        when(tutorialService.findByExactTitle("Spring")).thenReturn(tutorials);
+
+        ResponseEntity<List<Tutorial>> response = tutorialController.findByExactTitle("Spring");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(tutorials);
+        verify(tutorialService).findByExactTitle("Spring");
+    }
+
+    @Test
+    void findByExactTitleReturnsOkWithEmptyList() {
+        when(tutorialService.findByExactTitle("Missing")).thenReturn(Collections.emptyList());
+
+        ResponseEntity<List<Tutorial>> response = tutorialController.findByExactTitle("Missing");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEmpty();
+    }
+
+    @Test
+    void findByExactTitleReturnsInternalServerErrorOnUnexpectedError() {
+        when(tutorialService.findByExactTitle("Spring")).thenThrow(new RuntimeException());
+
+        ResponseEntity<List<Tutorial>> response = tutorialController.findByExactTitle("Spring");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+        assertThat(response.getBody()).isNull();
+    }
+
+    @Test
     void getTutorialByIdReturnsOkWhenFound() {
         Tutorial tutorial = new Tutorial("Spring", "REST API", true);
         when(tutorialService.getTutorialById(1L)).thenReturn(Optional.of(tutorial));

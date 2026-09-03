@@ -39,6 +39,16 @@ public class TutorialController {
         }
     }
 
+    @GetMapping("/tutorials/by-title")
+    public ResponseEntity<List<Tutorial>> findByExactTitle(@RequestParam String title) {
+        try {
+            List<Tutorial> tutorials = tutorialService.findByExactTitle(title);
+            return ResponseEntity.ok(tutorials);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
     @GetMapping("/tutorials/{id}")
     public ResponseEntity<Tutorial> getTutorialById(@PathVariable("id") long id) {
         return tutorialService.getTutorialById(id)

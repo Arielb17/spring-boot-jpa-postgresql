@@ -19,5 +19,7 @@ public interface TutorialService {
 
     void deleteAllTutorials();
 
+    List<Tutorial> findByExactTitle(String title);
+
     List<Tutorial> findByPublished();
 }
